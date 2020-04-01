@@ -1,6 +1,8 @@
 # dollar_tweet
 Tweet about the price MXN/USD with AWS Lambda (serverless)
 
+UPDATED to use python3
+
 Pre-steps:
 
  1. Create an AWS account.
@@ -20,9 +22,9 @@ Steps to install:
 
 `source env/bin/activate`
 
-`pip install lxml tweepy bs4`
+`pip3 install tweepy requests
 
-`pip freeze > requirements.txt`
+`pip3 freeze > requirements.txt`
 
 `npm init `
 

@@ -22,7 +22,7 @@ custom:
 
 provider:
     name: aws
-    runtime: python2.7
+    runtime: python3.7
 
     stage: dev
     region: us-east-1

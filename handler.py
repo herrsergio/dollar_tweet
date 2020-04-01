@@ -1,6 +1,5 @@
 import json
-from bs4 import BeautifulSoup
-import urllib
+import requests
 import tweepy
 
 
@@ -19,30 +18,12 @@ def TweetDollarMXN(event, context):
 
     api = tweepy.API(auth)
 
-    r = urllib.urlopen('http://bbv.infosel.com/bancomerindicators/index.aspx')
+    url = "https://api.bitso.com/v3/ticker/?book=tusd_mxn"
+    req = requests.get(url)
+    js = req.json()
+    dolar_venta = js["payload"]["bid"]
 
-    soup = BeautifulSoup(r, "lxml")
-
-    data = []
-
-    table = soup.find('table')
-    table_body = table.find('tbody')
-
-    line = 0
-
-    rows = table_body.find_all('tr')
-    for row in rows:
-        cols = row.find_all('td')
-        cols = [ele.text.strip() for ele in cols]
-        data.append([ele for ele in cols if ele])
-        line += 1
-        if line == 5:
-            break
-
-    dolar_venta = data[4][3]
-
-    message = data[4][2] +" "+ dolar_venta
-    #print message
+    message = "Dólar Venta "+dolar_venta
 
     api.update_status(status=message)
 

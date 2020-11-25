@@ -22,7 +22,7 @@ Steps to install:
 
 `source env/bin/activate`
 
-`pip3 install tweepy requests
+`pip3 install tweepy requests`
 
 `pip3 freeze > requirements.txt`
 

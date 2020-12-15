@@ -27,10 +27,4 @@ def TweetDollarMXN(event, context):
 
     api.update_status(status=message)
 
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(body)
-    }
-
-    return response
 

@@ -16,9 +16,9 @@ service: dollarTweet
 plugins:
     - serverless-python-requirements
 
-custom:
-    pythonRequirements:
-        dockerizePip: non-linux
+#custom:
+#    pythonRequirements:
+#        dockerizePip: non-linux
 
 provider:
     name: aws

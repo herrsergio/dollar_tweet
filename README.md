@@ -28,7 +28,5 @@ Steps to install:
 
 `npm init `
 
-`npm install --save serverless-python-requirements`
-
-5. `sls deploy`
+5. `serverless deploy`
 

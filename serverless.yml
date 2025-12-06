@@ -13,9 +13,18 @@
 
 service: dollarTweet
 
-#custom:
-#    pythonRequirements:
-#        dockerizePip: non-linux
+custom:
+    pythonRequirements:
+        dockerizePip: true
+
+package:
+    exclude:
+        - venv/**
+        - .venv/**
+        - env/**
+        - node_modules/**
+        - __pycache__/**
+
 
 provider:
     name: aws

@@ -1,4 +1,5 @@
 import json
+import os
 import requests
 import tweepy
 from dotenv import load_dotenv

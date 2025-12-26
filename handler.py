@@ -4,6 +4,12 @@ import requests
 import tweepy
 from dotenv import load_dotenv
 
+def get_bitso_bid(book):
+    url = f"https://api.bitso.com/v3/ticker/?book={book}"
+    req = requests.get(url)
+    js = req.json()
+    return float(js["payload"]["bid"])
+
 
 def TweetDollarMXN(event, context):
     # Load environment variables
@@ -29,12 +35,11 @@ def TweetDollarMXN(event, context):
                 consumer_key=consumer_key, consumer_secret=consumer_secret,
                 access_token=access_token, access_token_secret=access_token_secret)
 
-    url = "https://api.bitso.com/v3/ticker/?book=tusd_mxn"
-    req = requests.get(url)
-    js = req.json()
-    dolar_venta = float(js["payload"]["bid"])
+    dolar_venta = get_bitso_bid("tusd_mxn")
+    eth_venta = get_bitso_bid("eth_mxn")
+    btc_venta = get_bitso_bid("btc_mxn")
 
-    message = f"💵 Dólar Venta: ${dolar_venta:.2f} MXN"
+    message = f"💵 Dólar Venta: ${dolar_venta:.2f} MXN\nEthereum Venta: ${eth_venta:.2f} MXN\nBitcoin Venta: ${btc_venta:.2f} MXN"
 
     api.create_tweet(text=message)
 

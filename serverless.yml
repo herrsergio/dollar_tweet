@@ -13,19 +13,26 @@
 
 service: dollarTweet
 
-plugins:
-    - serverless-python-requirements
+custom:
+    pythonRequirements:
+        dockerizePip: true
 
-#custom:
-#    pythonRequirements:
-#        dockerizePip: non-linux
+package:
+    exclude:
+        - venv/**
+        - .venv/**
+        - env/**
+        - node_modules/**
+        - __pycache__/**
+
 
 provider:
     name: aws
-    runtime: python3.9
+    runtime: python3.12
 
     stage: dev
     region: us-east-1
+    logRetentionInDays: 7
 
 functions:
     dollarTweet:

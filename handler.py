@@ -35,7 +35,7 @@ def TweetDollarMXN(event, context):
                 consumer_key=consumer_key, consumer_secret=consumer_secret,
                 access_token=access_token, access_token_secret=access_token_secret)
 
-    dolar_venta = get_bitso_bid("tusd_mxn")
+    dolar_venta = get_bitso_bid("usd_mxn")
     eth_venta = get_bitso_bid("eth_mxn")
     btc_venta = get_bitso_bid("btc_mxn")
 

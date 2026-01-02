@@ -39,5 +39,6 @@ functions:
         handler: handler.TweetDollarMXN
         events:
             - schedule: rate(240 minutes)
+        maximumRetryAttempts: 0
 
 

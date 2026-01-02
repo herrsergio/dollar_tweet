@@ -39,7 +39,12 @@ def TweetDollarMXN(event, context):
     eth_venta = get_bitso_bid("eth_mxn")
     btc_venta = get_bitso_bid("btc_mxn")
 
-    message = f"💵 Dólar Venta: ${dolar_venta:.2f} MXN\nEthereum Venta: ${eth_venta:.2f} MXN\nBitcoin Venta: ${btc_venta:.2f} MXN"
+    message = (
+        f"💵\n"
+        f"{'Dólar:':<11} ${dolar_venta:>12,.2f} MXN\n"
+        f"{'Ethereum:':<11} ${eth_venta:>12,.2f} MXN\n"
+        f"{'Bitcoin:':<11} ${btc_venta:>12,.2f} MXN"
+    )
 
     api.create_tweet(text=message)
 

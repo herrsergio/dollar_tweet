@@ -4,11 +4,18 @@ import requests
 import tweepy
 from dotenv import load_dotenv
 
-def get_bitso_bid(book):
-    url = f"https://api.bitso.com/v3/ticker/?book={book}"
-    req = requests.get(url)
-    js = req.json()
-    return float(js["payload"]["bid"])
+def get_coingecko_history(coin_id):
+    url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart?vs_currency=mxn&days=7"
+    response = requests.get(url)
+    data = response.json()
+    prices = data["prices"]
+
+    price_now = prices[-1][1]
+    price_7d = prices[0][1]
+
+    change_pct = (price_now - price_7d) / price_7d * 100
+
+    return price_now, change_pct
 
 
 def TweetDollarMXN(event, context):
@@ -35,15 +42,20 @@ def TweetDollarMXN(event, context):
                 consumer_key=consumer_key, consumer_secret=consumer_secret,
                 access_token=access_token, access_token_secret=access_token_secret)
 
-    dolar_venta = get_bitso_bid("usd_mxn")
-    eth_venta = get_bitso_bid("eth_mxn")
-    btc_venta = get_bitso_bid("btc_mxn")
+    dolar_p, dolar_c = get_coingecko_history("usd")
+    eth_p, eth_c = get_coingecko_history("ethereum")
+    btc_p, btc_c = get_coingecko_history("bitcoin")
+
+    def format_line(name, price, change):
+        emoji = "🔼" if change >= 0 else "🔽"
+        sign = "+" if change > 0 else ""
+        return f"{name:<11} ${price:>12,.2f} MXN {emoji} {sign}{change:.1f}% (7d)"
 
     message = (
         f"💵\n"
-        f"{'Dólar:':<11} ${dolar_venta:>12,.2f} MXN\n"
-        f"{'Ethereum:':<11} ${eth_venta:>12,.2f} MXN\n"
-        f"{'Bitcoin:':<11} ${btc_venta:>12,.2f} MXN"
+        f"{format_line('Dólar:', dolar_p, dolar_c)}\n"
+        f"{format_line('Ethereum:', eth_p, eth_c)}\n"
+        f"{format_line('Bitcoin:', btc_p, btc_c)}"
     )
 
     api.create_tweet(text=message)

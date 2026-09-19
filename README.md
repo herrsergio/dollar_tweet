@@ -1,7 +1,11 @@
 # dollar_tweet
-Tweet about the price MXN/USD with AWS Lambda (serverless)
+Post the MXN/USD, Ethereum and Bitcoin prices to Bluesky with AWS Lambda (serverless)
 
-UPDATED to use python3
+UPDATED to use python3 and Bluesky (atproto)
+
+Configure your credentials by copying `.env.skel` to `.env` and filling in your
+Bluesky `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` (create the app password in
+Bluesky **Settings → App Passwords**, not your account password).
 
 Pre-steps:
 
@@ -22,7 +26,7 @@ Steps to install:
 
 `source env/bin/activate`
 
-`pip3 install tweepy requests`
+`pip3 install atproto grapheme requests python-dotenv`
 
 `pip3 freeze > requirements.txt`
 

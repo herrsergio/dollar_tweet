@@ -1,9 +1,12 @@
 import json
 import os
 import requests
-import tweepy
+import grapheme
+from atproto import Client
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
+
+MAX_GRAPHEMES = 300  # Bluesky post limit
 
 def get_usd_history():
     try:
@@ -43,25 +46,16 @@ def TweetDollarMXN(event, context):
     # Load environment variables
     load_dotenv()
 
-    CONSUMER_KEY = os.getenv("CONSUMER_KEY")
-    CONSUMER_SEC = os.getenv("CONSUMER_SEC")
-    ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
-    ACCESS_SECRE = os.getenv("ACCESS_SECRE")
+    BLUESKY_HANDLE = os.getenv("BLUESKY_HANDLE")
+    BLUESKY_APP_PASSWORD = os.getenv("BLUESKY_APP_PASSWORD")
 
-    if not CONSUMER_KEY or not ACCESS_TOKEN:
-        print("Error: Please add Twitter tokens in .env file.")
+    if not BLUESKY_HANDLE or not BLUESKY_APP_PASSWORD:
+        print("Error: Please add BLUESKY_HANDLE and BLUESKY_APP_PASSWORD in .env file.")
         exit(1)
 
-    # Refer to https://apps.twitter.com/
-    consumer_key = CONSUMER_KEY
-    consumer_secret = CONSUMER_SEC
-
-    access_token = ACCESS_TOKEN
-    access_token_secret = ACCESS_SECRE
-
-    api = tweepy.Client(
-                consumer_key=consumer_key, consumer_secret=consumer_secret,
-                access_token=access_token, access_token_secret=access_token_secret)
+    # App password is created in Bluesky Settings -> App Passwords
+    client = Client()
+    client.login(BLUESKY_HANDLE, BLUESKY_APP_PASSWORD)
 
     dolar_p, dolar_c = get_usd_history()
     eth_p, eth_c = get_coingecko_history("ethereum")
@@ -79,6 +73,10 @@ def TweetDollarMXN(event, context):
         f"{format_line('Bitcoin:', btc_p, btc_c)}"
     )
 
-    api.create_tweet(text=message)
+    # Bluesky counts length in graphemes, not code points; truncate if needed.
+    if grapheme.length(message) > MAX_GRAPHEMES:
+        message = grapheme.slice(message, 0, MAX_GRAPHEMES - 1) + "…"
+
+    client.send_post(text=message)
 
 

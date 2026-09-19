@@ -68,7 +68,7 @@ def TweetDollarMXN(event, context):
 
     message = (
         f"💵\n"
-        f"{format_line('Dólar:', dolar_p, dolar_c)}\n"
+        f"{format_line('Dollar:', dolar_p, dolar_c)}\n"
         f"{format_line('Ethereum:', eth_p, eth_c)}\n"
         f"{format_line('Bitcoin:', btc_p, btc_c)}"
     )
